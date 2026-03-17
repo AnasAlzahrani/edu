@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Desert Sand Simulation</title>
+<title>Saudi Arabian Sand Simulation</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -64,6 +64,14 @@
     accent-color: #d4a84a;
   }
 
+  #subtitle {
+    font-size: 1rem;
+    margin-bottom: 6px;
+    opacity: 0.7;
+    font-style: italic;
+    direction: rtl;
+  }
+
   #info {
     font-size: 0.7rem;
     opacity: 0.6;
@@ -80,16 +88,19 @@
 </head>
 <body>
 
-<h1>Desert Sand Simulation</h1>
+<h1>Sand of Saudi Arabia</h1>
+<div id="subtitle">رمال المملكة العربية السعودية</div>
 
 <div id="info">Click & drag to pour sand | Scroll to change brush size</div>
 
 <div id="toolbar">
-  <button class="btn active" data-material="sand">Sand</button>
-  <button class="btn" data-material="darkSand">Dark Sand</button>
-  <button class="btn" data-material="water">Water</button>
-  <button class="btn" data-material="stone">Stone</button>
-  <button class="btn" data-material="cactus">Cactus</button>
+  <button class="btn active" data-material="rubAlKhali" title="Rub' al Khali — The Empty Quarter, golden-red dune sand">Rub' al Khali</button>
+  <button class="btn" data-material="nafud" title="An-Nafud — pale rose-gold sand of the northern desert">An-Nafud</button>
+  <button class="btn" data-material="dahna" title="Ad-Dahna — reddish corridor sand connecting the great deserts">Ad-Dahna</button>
+  <button class="btn" data-material="hejaz" title="Hejaz — dark volcanic sand from the western lava fields">Hejaz Volcanic</button>
+  <button class="btn" data-material="water">Oasis Water</button>
+  <button class="btn" data-material="limestone" title="Limestone — sedimentary rock found across Saudi plateaus">Limestone</button>
+  <button class="btn" data-material="palm" title="Date palm — iconic tree of Saudi oases">Date Palm</button>
   <button class="btn" data-material="eraser">Eraser</button>
   <label>Brush: <input type="range" id="brushSize" min="1" max="12" value="3"><span id="brushVal">3</span></label>
   <button class="btn" id="clearBtn">Clear</button>
@@ -108,8 +119,8 @@ const ROWS = Math.floor(Math.min(window.innerHeight * 0.65, 600) / CELL);
 canvas.width = COLS * CELL;
 canvas.height = ROWS * CELL;
 
-// Material types
-const EMPTY = 0, SAND = 1, WATER = 2, STONE = 3, DARK_SAND = 4, CACTUS = 5;
+// Material types — Saudi Arabian deserts
+const EMPTY = 0, RUB_AL_KHALI = 1, WATER = 2, LIMESTONE = 3, NAFUD = 4, PALM = 5, DAHNA = 6, HEJAZ = 7;
 
 // Grid state
 let grid = new Uint8Array(COLS * ROWS);
@@ -119,12 +130,21 @@ let updated = new Uint8Array(COLS * ROWS);
 const idx = (x, y) => y * COLS + x;
 const inBounds = (x, y) => x >= 0 && x < COLS && y >= 0 && y < ROWS;
 
-// Color palettes with slight variation
-const sandColors = ['#e8c872', '#dbb960', '#f0d080', '#d4ad4e', '#ecd17a'];
-const darkSandColors = ['#b8944a', '#a68338', '#c9a050', '#9a7830', '#b08840'];
-const waterColors = ['#3a7bc8', '#2d6ab5', '#4888d4', '#2560a8', '#5090dc'];
-const stoneColors = ['#808080', '#707070', '#909090', '#686868', '#989898'];
-const cactusColors = ['#2d7a2d', '#257025', '#358035', '#1e6a1e', '#3d8a3d'];
+// Color palettes — authentic Saudi desert tones
+// Rub' al Khali (Empty Quarter): deep golden-orange, wind-sculpted dune sand
+const rubAlKhaliColors = ['#e8a840', '#d49530', '#f0b848', '#c88a28', '#dca038'];
+// An-Nafud: pale rose-gold, lighter and finer
+const nafudColors = ['#f0d0a0', '#e8c490', '#f5d8a8', '#ddb888', '#f2cca0'];
+// Ad-Dahna: distinctive reddish sand corridor
+const dahnaColors = ['#c86030', '#b85028', '#d47038', '#a84820', '#d06840'];
+// Hejaz volcanic: dark basaltic sand from Harrat lava fields
+const hejazColors = ['#3a3530', '#302b28', '#454038', '#282420', '#4a4540'];
+// Oasis water: turquoise-tinted desert spring water
+const waterColors = ['#2a8a8a', '#1e7878', '#349898', '#186c6c', '#40a0a0'];
+// Limestone: pale sedimentary plateau rock
+const limestoneColors = ['#c8bca0', '#b8b090', '#d0c4a8', '#b0a888', '#d8ccb0'];
+// Date palm: deep green of Saudi oasis trees
+const palmColors = ['#2d6a2d', '#1e5a1e', '#387038', '#185018', '#407840'];
 
 // Assign a stable color index per cell
 let colorIdx = new Uint8Array(COLS * ROWS);
@@ -133,11 +153,13 @@ for (let i = 0; i < colorIdx.length; i++) colorIdx[i] = Math.floor(Math.random()
 function getColor(type, i) {
   const ci = colorIdx[i];
   switch (type) {
-    case SAND: return sandColors[ci];
-    case DARK_SAND: return darkSandColors[ci];
+    case RUB_AL_KHALI: return rubAlKhaliColors[ci];
+    case NAFUD: return nafudColors[ci];
+    case DAHNA: return dahnaColors[ci];
+    case HEJAZ: return hejazColors[ci];
     case WATER: return waterColors[ci];
-    case STONE: return stoneColors[ci];
-    case CACTUS: return cactusColors[ci];
+    case LIMESTONE: return limestoneColors[ci];
+    case PALM: return palmColors[ci];
     default: return null;
   }
 }
@@ -151,10 +173,11 @@ bgGrad.addColorStop(1, '#1a0e05');
 // Mouse state
 let mouse = { x: -1, y: -1, down: false };
 let brushSize = 3;
-let material = 'sand';
+let material = 'rubAlKhali';
 
 const materialMap = {
-  sand: SAND, darkSand: DARK_SAND, water: WATER, stone: STONE, cactus: CACTUS, eraser: EMPTY
+  rubAlKhali: RUB_AL_KHALI, nafud: NAFUD, dahna: DAHNA, hejaz: HEJAZ,
+  water: WATER, limestone: LIMESTONE, palm: PALM, eraser: EMPTY
 };
 
 // Toolbar events
@@ -237,7 +260,7 @@ function simulate() {
       if (updated[ci]) continue;
       const cell = nextGrid[ci];
 
-      if (cell === SAND || cell === DARK_SAND) {
+      if (cell === RUB_AL_KHALI || cell === NAFUD || cell === DAHNA || cell === HEJAZ) {
         simulateGrain(x, y, cell, nextGrid, updated);
       } else if (cell === WATER) {
         simulateWater(x, y, nextGrid, updated);
