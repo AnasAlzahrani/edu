@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desert Sand Simulation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a0e05;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e8d5b7;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    text-shadow: 0 0 12px rgba(255, 180, 60, 0.4);
+    letter-spacing: 2px;
+  }
+
+  #toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 6px 14px;
+    border: 1px solid #a0845c;
+    border-radius: 6px;
+    background: rgba(160, 132, 92, 0.15);
+    color: #e8d5b7;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { background: rgba(160, 132, 92, 0.35); }
+  .btn.active {
+    background: rgba(210, 170, 100, 0.4);
+    box-shadow: 0 0 8px rgba(255, 180, 60, 0.3);
+    border-color: #d4a84a;
+  }
+
+  label {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  input[type="range"] {
+    width: 80px;
+    accent-color: #d4a84a;
+  }
+
+  #info {
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-bottom: 6px;
+  }
+
+  canvas {
+    border: 2px solid #a0845c;
+    border-radius: 4px;
+    cursor: crosshair;
+    image-rendering: pixelated;
+  }
+</style>
+</head>
+<body>
+
+<h1>Desert Sand Simulation</h1>
+
+<div id="info">Click & drag to pour sand | Scroll to change brush size</div>
+
+<div id="toolbar">
+  <button class="btn active" data-material="sand">Sand</button>
+  <button class="btn" data-material="darkSand">Dark Sand</button>
+  <button class="btn" data-material="water">Water</button>
+  <button class="btn" data-material="stone">Stone</button>
+  <button class="btn" data-material="cactus">Cactus</button>
+  <button class="btn" data-material="eraser">Eraser</button>
+  <label>Brush: <input type="range" id="brushSize" min="1" max="12" value="3"><span id="brushVal">3</span></label>
+  <button class="btn" id="clearBtn">Clear</button>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Grid dimensions
+const CELL = 3;
+const COLS = Math.floor(Math.min(window.innerWidth * 0.92, 800) / CELL);
+const ROWS = Math.floor(Math.min(window.innerHeight * 0.65, 600) / CELL);
+canvas.width = COLS * CELL;
+canvas.height = ROWS * CELL;
+
+// Material types
+const EMPTY = 0, SAND = 1, WATER = 2, STONE = 3, DARK_SAND = 4, CACTUS = 5;
+
+// Grid state
+let grid = new Uint8Array(COLS * ROWS);
+let nextGrid = new Uint8Array(COLS * ROWS);
+let updated = new Uint8Array(COLS * ROWS);
+
+const idx = (x, y) => y * COLS + x;
+const inBounds = (x, y) => x >= 0 && x < COLS && y >= 0 && y < ROWS;
+
+// Color palettes with slight variation
+const sandColors = ['#e8c872', '#dbb960', '#f0d080', '#d4ad4e', '#ecd17a'];
+const darkSandColors = ['#b8944a', '#a68338', '#c9a050', '#9a7830', '#b08840'];
+const waterColors = ['#3a7bc8', '#2d6ab5', '#4888d4', '#2560a8', '#5090dc'];
+const stoneColors = ['#808080', '#707070', '#909090', '#686868', '#989898'];
+const cactusColors = ['#2d7a2d', '#257025', '#358035', '#1e6a1e', '#3d8a3d'];
+
+// Assign a stable color index per cell
+let colorIdx = new Uint8Array(COLS * ROWS);
+for (let i = 0; i < colorIdx.length; i++) colorIdx[i] = Math.floor(Math.random() * 5);
+
+function getColor(type, i) {
+  const ci = colorIdx[i];
+  switch (type) {
+    case SAND: return sandColors[ci];
+    case DARK_SAND: return darkSandColors[ci];
+    case WATER: return waterColors[ci];
+    case STONE: return stoneColors[ci];
+    case CACTUS: return cactusColors[ci];
+    default: return null;
+  }
+}
+
+// Desert gradient background
+const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+bgGrad.addColorStop(0, '#2a1a0a');
+bgGrad.addColorStop(0.5, '#3a2510');
+bgGrad.addColorStop(1, '#1a0e05');
+
+// Mouse state
+let mouse = { x: -1, y: -1, down: false };
+let brushSize = 3;
+let material = 'sand';
+
+const materialMap = {
+  sand: SAND, darkSand: DARK_SAND, water: WATER, stone: STONE, cactus: CACTUS, eraser: EMPTY
+};
+
+// Toolbar events
+document.querySelectorAll('[data-material]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-material]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    material = btn.dataset.material;
+  });
+});
+
+document.getElementById('brushSize').addEventListener('input', e => {
+  brushSize = parseInt(e.target.value);
+  document.getElementById('brushVal').textContent = brushSize;
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  grid.fill(EMPTY);
+});
+
+canvas.addEventListener('mousedown', e => { mouse.down = true; updateMouse(e); });
+canvas.addEventListener('mousemove', updateMouse);
+canvas.addEventListener('mouseup', () => mouse.down = false);
+canvas.addEventListener('mouseleave', () => mouse.down = false);
+
+canvas.addEventListener('touchstart', e => { e.preventDefault(); mouse.down = true; updateTouch(e); });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); updateTouch(e); });
+canvas.addEventListener('touchend', () => mouse.down = false);
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const slider = document.getElementById('brushSize');
+  brushSize = Math.max(1, Math.min(12, brushSize + (e.deltaY > 0 ? -1 : 1)));
+  slider.value = brushSize;
+  document.getElementById('brushVal').textContent = brushSize;
+});
+
+function updateMouse(e) {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = Math.floor((e.clientX - rect.left) / CELL);
+  mouse.y = Math.floor((e.clientY - rect.top) / CELL);
+}
+
+function updateTouch(e) {
+  const rect = canvas.getBoundingClientRect();
+  const t = e.touches[0];
+  mouse.x = Math.floor((t.clientX - rect.left) / CELL);
+  mouse.y = Math.floor((t.clientY - rect.top) / CELL);
+}
+
+function placeMaterial() {
+  if (!mouse.down) return;
+  const type = materialMap[material];
+  const r = brushSize;
+  for (let dy = -r; dy <= r; dy++) {
+    for (let dx = -r; dx <= r; dx++) {
+      if (dx * dx + dy * dy > r * r) continue;
+      const nx = mouse.x + dx;
+      const ny = mouse.y + dy;
+      if (!inBounds(nx, ny)) continue;
+      if (type === EMPTY || Math.random() < 0.6) {
+        grid[idx(nx, ny)] = type;
+        colorIdx[idx(nx, ny)] = Math.floor(Math.random() * 5);
+      }
+    }
+  }
+}
+
+function simulate() {
+  nextGrid.set(grid);
+  updated.fill(0);
+
+  // Process bottom-to-top so sand falls naturally
+  for (let y = ROWS - 2; y >= 0; y--) {
+    // Alternate left-right sweep for natural look
+    const leftToRight = Math.random() > 0.5;
+    for (let i = 0; i < COLS; i++) {
+      const x = leftToRight ? i : COLS - 1 - i;
+      const ci = idx(x, y);
+      if (updated[ci]) continue;
+      const cell = nextGrid[ci];
+
+      if (cell === SAND || cell === DARK_SAND) {
+        simulateGrain(x, y, cell, nextGrid, updated);
+      } else if (cell === WATER) {
+        simulateWater(x, y, nextGrid, updated);
+      }
+    }
+  }
+
+  [grid, nextGrid] = [nextGrid, grid];
+}
+
+function simulateGrain(x, y, type, g, u) {
+  const below = idx(x, y + 1);
+  const belowL = inBounds(x - 1, y + 1) ? idx(x - 1, y + 1) : -1;
+  const belowR = inBounds(x + 1, y + 1) ? idx(x + 1, y + 1) : -1;
+  const ci = idx(x, y);
+
+  // Fall straight down
+  if (y + 1 < ROWS && (g[below] === EMPTY || g[below] === WATER)) {
+    const displaced = g[below];
+    g[below] = type;
+    g[ci] = displaced;
+    colorIdx[below] = colorIdx[ci];
+    if (displaced === WATER) colorIdx[ci] = Math.floor(Math.random() * 5);
+    u[below] = 1;
+    u[ci] = 1;
+    return;
+  }
+
+  // Slide diagonally
+  const tryLeft = Math.random() > 0.5;
+  const first = tryLeft ? belowL : belowR;
+  const second = tryLeft ? belowR : belowL;
+  const fx = tryLeft ? x - 1 : x + 1;
+  const sx = tryLeft ? x + 1 : x - 1;
+
+  if (first !== -1 && (g[first] === EMPTY || g[first] === WATER)) {
+    const displaced = g[first];
+    g[first] = type;
+    g[ci] = displaced;
+    colorIdx[first] = colorIdx[ci];
+    if (displaced === WATER) colorIdx[ci] = Math.floor(Math.random() * 5);
+    u[first] = 1;
+    u[ci] = 1;
+    return;
+  }
+  if (second !== -1 && (g[second] === EMPTY || g[second] === WATER)) {
+    const displaced = g[second];
+    g[second] = type;
+    g[ci] = displaced;
+    colorIdx[second] = colorIdx[ci];
+    if (displaced === WATER) colorIdx[ci] = Math.floor(Math.random() * 5);
+    u[second] = 1;
+    u[ci] = 1;
+  }
+}
+
+function simulateWater(x, y, g, u) {
+  const ci = idx(x, y);
+
+  // Fall down
+  if (y + 1 < ROWS) {
+    const below = idx(x, y + 1);
+    if (g[below] === EMPTY) {
+      g[below] = WATER;
+      g[ci] = EMPTY;
+      colorIdx[below] = colorIdx[ci];
+      u[below] = 1;
+      u[ci] = 1;
+      return;
+    }
+  }
+
+  // Diagonal down
+  const tryLeft = Math.random() > 0.5;
+  const dirs = tryLeft ? [-1, 1] : [1, -1];
+  for (const dx of dirs) {
+    if (inBounds(x + dx, y + 1)) {
+      const di = idx(x + dx, y + 1);
+      if (g[di] === EMPTY) {
+        g[di] = WATER;
+        g[ci] = EMPTY;
+        colorIdx[di] = colorIdx[ci];
+        u[di] = 1;
+        u[ci] = 1;
+        return;
+      }
+    }
+  }
+
+  // Spread sideways
+  for (const dx of dirs) {
+    if (inBounds(x + dx, y)) {
+      const si = idx(x + dx, y);
+      if (g[si] === EMPTY && Math.random() < 0.4) {
+        g[si] = WATER;
+        g[ci] = EMPTY;
+        colorIdx[si] = colorIdx[ci];
+        u[si] = 1;
+        u[ci] = 1;
+        return;
+      }
+    }
+  }
+}
+
+function draw() {
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let y = 0; y < ROWS; y++) {
+    for (let x = 0; x < COLS; x++) {
+      const i = idx(x, y);
+      const c = getColor(grid[i], i);
+      if (c) {
+        ctx.fillStyle = c;
+        ctx.fillRect(x * CELL, y * CELL, CELL, CELL);
+      }
+    }
+  }
+
+  // Draw brush preview
+  if (mouse.x >= 0 && mouse.y >= 0) {
+    ctx.strokeStyle = 'rgba(255,220,150,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(mouse.x * CELL + CELL / 2, mouse.y * CELL + CELL / 2, brushSize * CELL, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+}
+
+function loop() {
+  placeMaterial();
+  simulate();
+  simulate(); // double step for faster motion
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
+</body>
+</html>
