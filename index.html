@@ -6,456 +6,354 @@
 <title>AQRAB - عقرب</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --sand-light: #f0d0a0;
-    --sand-mid: #e8a840;
-    --sand-dark: #c86030;
-    --brown-dark: #3a2a1a;
-    --brown-mid: #5a3a28;
-    --cream: #f5ecd4;
-    --yellow-btn: #e8b830;
-    --yellow-btn-hover: #d4a020;
-    --nav-bg: #3a2820;
-    --nav-border: #5a4030;
-    --pixel-border: #2a1a10;
-  }
 
   body {
     background: #1a0e06;
     font-family: 'Press Start 2P', monospace;
     color: #e8d5b7;
     overflow-x: hidden;
-    image-rendering: pixelated;
+    overflow-y: auto;
   }
 
-  /* ===== NAV BAR ===== */
+  /* ===== SANDSTONE BRICK NAV ===== */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: linear-gradient(180deg, #6a4a30 0%, #5a3a24 30%, #4a2e1a 100%);
-    border-top: 3px solid #8a6848;
-    border-bottom: 4px solid #2a1808;
-    display: flex; justify-content: center; gap: 6px;
-    padding: 6px 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.6),
-      inset 0 1px 0 rgba(255,200,120,0.15),
-      inset 0 -1px 0 rgba(0,0,0,0.3);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; justify-content: center; gap: 0;
+    padding: 0;
+    /* Sandstone brick texture via layered gradients */
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0px, transparent 118px,
+        #6a4a28 118px, #6a4a28 122px
+      ),
+      repeating-linear-gradient(0deg,
+        transparent 0px, transparent 22px,
+        #5a3a20 22px, #5a3a20 24px
+      ),
+      linear-gradient(180deg, #c8a070 0%, #b89060 20%, #a88050 50%, #c09868 80%, #b89060 100%);
+    border-bottom: 5px solid #4a2e18;
+    box-shadow:
+      0 5px 20px rgba(0,0,0,0.5),
+      inset 0 -2px 0 #6a4428,
+      inset 0 2px 0 rgba(255,220,160,0.2);
+    height: 58px;
+  }
+
+  /* Brick bottom edge detail */
+  nav::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0; height: 3px;
+    background: repeating-linear-gradient(90deg,
+      #3a2010 0px, #3a2010 20px,
+      #4a2e18 20px, #4a2e18 22px
+    );
   }
 
   nav a {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 22px;
-    color: var(--sand-light);
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 28px;
+    color: #5a3a20;
     text-decoration: none;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     letter-spacing: 1px;
     cursor: pointer;
-    border: 3px solid #3a2010;
-    background: linear-gradient(180deg, #5a4028 0%, #4a3020 50%, #3a2418 100%);
+    margin: 8px 4px;
+    border: 3px solid #7a5a38;
+    background: linear-gradient(180deg, #c8a878 0%, #b89868 40%, #a88858 100%);
     box-shadow:
-      inset 1px 1px 0 rgba(255,200,120,0.12),
-      inset -1px -1px 0 rgba(0,0,0,0.2),
-      2px 2px 0 rgba(0,0,0,0.3);
-    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
-    image-rendering: pixelated;
+      inset 1px 1px 0 rgba(255,230,180,0.3),
+      inset -1px -1px 0 rgba(80,50,20,0.2),
+      2px 2px 0 rgba(0,0,0,0.2);
+    transition: all 0.15s;
+    position: relative;
   }
   nav a:hover {
-    background: linear-gradient(180deg, #6a5030 0%, #5a3828 50%, #4a2c1a 100%);
-    color: #fff;
+    background: linear-gradient(180deg, #d8b888 0%, #c8a878 40%, #b89868 100%);
+    color: #3a2010;
+    transform: translateY(-1px);
     box-shadow:
-      inset 1px 1px 0 rgba(255,200,120,0.2),
-      inset -1px -1px 0 rgba(0,0,0,0.2),
-      2px 2px 0 rgba(0,0,0,0.3);
+      inset 1px 1px 0 rgba(255,230,180,0.4),
+      inset -1px -1px 0 rgba(80,50,20,0.2),
+      3px 3px 0 rgba(0,0,0,0.25);
   }
   nav a.active {
-    background: linear-gradient(180deg, #f0c848 0%, #e0b030 50%, #d0a028 100%);
-    color: var(--brown-dark);
-    border-color: #8a6020;
+    background: linear-gradient(180deg, #f0c850 0%, #e0b838 40%, #d0a828 100%);
+    color: #4a2e18;
+    border-color: #a87828;
     box-shadow:
-      inset 1px 1px 0 rgba(255,255,200,0.35),
-      inset -1px -1px 0 rgba(0,0,0,0.15),
-      2px 2px 0 rgba(0,0,0,0.3);
+      inset 1px 1px 0 rgba(255,255,200,0.4),
+      inset -1px -1px 0 rgba(80,50,20,0.15),
+      2px 2px 0 rgba(0,0,0,0.25);
   }
 
-  nav .nav-icon {
-    font-size: 1rem;
-    display: inline-block;
-    image-rendering: pixelated;
-    opacity: 0.8;
-  }
+  nav .nav-icon { font-size: 1rem; opacity: 0.7; }
   nav a.active .nav-icon { opacity: 1; }
 
   /* ===== SECTIONS ===== */
-  section {
-    display: none;
-    min-height: 100vh;
-    padding-top: 56px;
-  }
+  section { display: none; min-height: 100vh; padding-top: 58px; }
   section.active { display: block; }
 
-  /* ===== HOME SECTION ===== */
-  #home {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-  }
+  /* ===== HOME ===== */
+  #home { position: relative; height: 100vh; overflow: hidden; }
 
-  #sand-canvas {
-    position: absolute;
-    top: 56px; left: 0;
-    width: 100%;
-    height: calc(100vh - 56px);
-    image-rendering: pixelated;
-    cursor: pointer;
-  }
-
-  /* Pixel desert background — warm sunset bands matching reference */
-  .desert-bg {
-    position: absolute;
-    top: 56px; left: 0; right: 0;
-    height: calc(100vh - 56px);
-    z-index: 0;
+  /* Blue desert sky */
+  .sky-bg {
+    position: absolute; top: 58px; left: 0; right: 0;
+    height: calc(100vh - 58px);
     background: linear-gradient(180deg,
-      #b86850 0%,
-      #d08068 5%,
-      #e09878 10%,
-      #e8a880 16%,
-      #f0b888 22%,
-      #f0c898 28%,
-      #f5d8a8 34%,
-      #f8e0b8 40%,
-      #f5d8a8 46%,
-      #f0cc98 52%,
-      #e8c088 58%,
-      #e0b478 64%,
-      #d09860 72%,
-      #c08050 80%,
-      #a06840 88%,
-      #8a5030 94%,
-      #6a3820 100%
+      #5ea8d8 0%,
+      #78bce0 15%,
+      #90cce8 30%,
+      #a8d8f0 42%,
+      #c0e4f4 55%,
+      #d8eef8 65%,
+      #e8f2f0 72%,
+      #f0ece0 78%,
+      #f0e0c8 84%,
+      #e8d0b0 90%,
+      #d8c0a0 95%,
+      #c8a880 100%
     );
   }
 
-  /* Sun glow on horizon */
+  /* Sun with glow */
   .sun {
     position: absolute;
-    bottom: 46%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70px; height: 70px;
+    top: calc(58px + 8%);
+    right: 12%;
+    width: 80px; height: 80px;
     background: radial-gradient(circle,
-      #fffff0 20%,
-      #fff8d0 35%,
-      #f0d880 55%,
-      rgba(240,200,100,0.3) 70%,
-      transparent 80%
+      #ffffff 25%,
+      #fff8e0 40%,
+      rgba(255,240,200,0.6) 55%,
+      rgba(200,220,240,0.2) 75%,
+      transparent 90%
     );
     border-radius: 50%;
-    z-index: 1;
+    z-index: 2;
+    filter: blur(1px);
+  }
+  /* Lens flare */
+  .sun::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle,
+      rgba(255,255,255,0.15) 0%,
+      rgba(255,248,220,0.08) 40%,
+      transparent 70%
+    );
+    border-radius: 50%;
   }
 
-  /* Hero content overlay */
+  /* Sand canvas */
+  #sand-canvas {
+    position: absolute; top: 58px; left: 0;
+    width: 100%; height: calc(100vh - 58px);
+    image-rendering: pixelated;
+    z-index: 5;
+  }
+
+  /* Hero content */
   .hero-content {
-    position: absolute;
-    top: 56px; left: 0; right: 0;
-    height: calc(100vh - 56px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
-    pointer-events: none;
-    padding-bottom: 18%;
+    position: absolute; top: 58px; left: 0; right: 0;
+    height: calc(100vh - 58px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 30; pointer-events: none;
+    padding-bottom: 20%;
+    transition: transform 0.1s ease-out;
   }
 
   .hero-title {
-    font-size: clamp(3rem, 10vw, 6rem);
-    color: #f0dcc0;
+    font-size: clamp(3rem, 10vw, 6.5rem);
+    color: #e0c890;
     text-shadow:
-      0 4px 0 #8a6040,
-      0 5px 0 #6a4428,
-      0 6px 0 #4a2e18,
-      4px 4px 0 #6a4428,
-      -2px -2px 0 #3a2010,
-      2px -2px 0 #3a2010,
-      -2px 2px 0 #3a2010,
-      2px 2px 0 #3a2010,
-      0 0 30px rgba(232,168,64,0.3);
+      0 4px 0 #8a6838,
+      0 5px 0 #6a4a28,
+      0 6px 0 #4a3018,
+      4px 6px 0 #4a3018,
+      -2px -2px 0 #5a3a20,
+      2px -2px 0 #5a3a20,
+      -2px 2px 0 #5a3a20;
     letter-spacing: 10px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    -webkit-text-stroke: 2px #4a2e18;
+    display: flex; align-items: center; gap: 20px;
+    -webkit-text-stroke: 2px #5a3a20;
     paint-order: stroke fill;
   }
 
-  /* Pixel scorpion drawn with CSS */
-  .scorpion {
-    display: inline-block;
-    width: clamp(50px, 10vw, 90px);
-    height: clamp(40px, 8vw, 70px);
-    position: relative;
-  }
-
   .hero-subtitle {
-    font-size: clamp(0.5rem, 1.5vw, 0.8rem);
-    opacity: 0.6;
-    margin-top: 16px;
-    letter-spacing: 2px;
+    font-size: clamp(0.5rem, 1.5vw, 0.75rem);
+    opacity: 0.5; margin-top: 14px; letter-spacing: 2px;
+    color: #6a4a30;
   }
 
   .hero-hint {
-    font-size: 0.55rem;
-    opacity: 0.35;
-    margin-top: 24px;
+    font-size: 0.5rem; opacity: 0.4; margin-top: 20px;
+    color: #6a4a30;
     animation: pulse 2.5s ease-in-out infinite;
   }
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:0.7} }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.35; }
-    50% { opacity: 0.6; }
+  /* ===== ANIMATED SCORPION (follows cursor) ===== */
+  #scorpion {
+    position: fixed;
+    z-index: 150;
+    pointer-events: none;
+    transition: none;
+    filter: drop-shadow(2px 3px 2px rgba(0,0,0,0.3));
   }
+  #scorpion.flip { transform: scaleX(-1); }
 
-  /* ===== ABOUT SECTION ===== */
-  #about {
-    background: linear-gradient(180deg, #2a1a0e 0%, #1a0e06 100%);
-    padding: 80px 20px 60px;
+  /* ===== DUST PARTICLES ===== */
+  .dust {
+    position: fixed;
+    pointer-events: none;
+    z-index: 140;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #d8c098;
+    animation: dustFloat 1s ease-out forwards;
   }
-
-  .about-container {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .pixel-card {
-    background: var(--cream);
-    color: var(--brown-dark);
-    border: 4px solid var(--pixel-border);
-    box-shadow:
-      inset -3px -3px 0 rgba(0,0,0,0.15),
-      inset 3px 3px 0 rgba(255,255,255,0.3),
-      6px 6px 0 rgba(0,0,0,0.3);
-    padding: 32px 28px;
-    image-rendering: pixelated;
-  }
-
-  .pixel-card h2 {
-    font-size: clamp(1rem, 3vw, 1.4rem);
-    margin-bottom: 20px;
-    color: var(--brown-mid);
-  }
-
-  .pixel-card p {
-    font-size: clamp(0.5rem, 1.2vw, 0.65rem);
-    line-height: 2.2;
-    color: #5a4030;
-  }
-
-  .about-scorpion-row {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin: 24px 0 8px;
-  }
-
-  .mini-scorpion {
-    font-size: 1.8rem;
+  @keyframes dustFloat {
+    0% { opacity: 0.8; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
   }
 
   /* ===== PROMPT SECTION ===== */
   #prompt {
     background: linear-gradient(180deg,
-      #c07858 0%, #d89070 10%, #e8a878 20%,
-      #f0c090 30%, #e0b478 50%,
-      #c08050 70%, #a06840 85%, #6a3820 100%
+      #5ea8d8 0%, #90cce8 20%, #c0e4f4 40%,
+      #e8d0b0 60%, #c8a880 80%, #a08060 100%
     );
     padding: 80px 20px 60px;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
   }
   #prompt.active { display: flex; }
 
   .prompt-card {
     position: relative;
-    background: var(--cream);
-    color: var(--brown-dark);
-    border: 5px solid var(--pixel-border);
-    outline: 4px solid #d09040;
-    outline-offset: 4px;
+    background: #f5ecd4;
+    color: #3a2a1a;
+    border: 5px solid #3a2010;
+    outline: 4px solid #c89040;
+    outline-offset: 5px;
     box-shadow:
       inset -3px -3px 0 rgba(0,0,0,0.12),
       inset 3px 3px 0 rgba(255,255,255,0.25),
       8px 8px 0 rgba(0,0,0,0.3),
-      0 0 0 10px rgba(180,120,50,0.25);
+      0 0 0 11px rgba(160,100,40,0.2);
     padding: 36px 32px;
-    max-width: 600px;
-    width: 100%;
-    image-rendering: pixelated;
+    max-width: 600px; width: 100%;
   }
-  /* Corner accents */
   .prompt-card::before {
-    content: '';
-    position: absolute;
-    inset: -10px;
-    border: 3px solid #a06830;
-    pointer-events: none;
+    content: ''; position: absolute; inset: -12px;
+    border: 3px solid #a06830; pointer-events: none;
   }
-
   .prompt-card h2 {
     font-size: clamp(1rem, 3vw, 1.5rem);
-    margin-bottom: 24px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    margin-bottom: 24px; text-align: center;
   }
-
   .prompt-card h2 .aqrab-text {
-    color: var(--sand-mid);
-    text-shadow: 2px 2px 0 var(--brown-dark);
+    color: #d4a040;
+    text-shadow: 2px 2px 0 #5a3a20;
   }
-
   .prompt-textarea {
-    width: 100%;
-    min-height: 140px;
-    padding: 16px;
-    border: 3px solid var(--pixel-border);
-    background: var(--cream);
-    color: var(--brown-dark);
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.6rem;
-    line-height: 2;
-    resize: vertical;
+    width: 100%; min-height: 140px; padding: 16px;
+    border: 3px solid #3a2010; background: #f5ecd4;
+    color: #3a2a1a; font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem; line-height: 2; resize: vertical;
     outline: none;
-    image-rendering: pixelated;
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.1);
   }
-
-  .prompt-textarea::placeholder {
-    color: #b0a088;
-  }
-
-  .prompt-textarea:focus {
-    border-color: var(--sand-mid);
-  }
+  .prompt-textarea::placeholder { color: #b0a088; }
+  .prompt-textarea:focus { border-color: #d4a040; }
 
   .submit-btn {
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    padding: 18px;
-    background: var(--yellow-btn);
-    color: var(--brown-dark);
-    font-family: 'Press Start 2P', monospace;
-    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-    letter-spacing: 4px;
-    border: 3px solid var(--pixel-border);
-    cursor: pointer;
+    display: block; width: 100%; margin-top: 20px; padding: 18px;
+    background: linear-gradient(180deg, #f0c848 0%, #e0b030 50%, #d0a028 100%);
+    color: #3a2a1a; font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.9rem, 2.5vw, 1.3rem); letter-spacing: 4px;
+    border: 3px solid #5a3a20; cursor: pointer;
     box-shadow:
       inset -3px -3px 0 rgba(0,0,0,0.15),
       inset 3px 3px 0 rgba(255,255,255,0.3),
       4px 4px 0 rgba(0,0,0,0.25);
     transition: transform 0.1s, box-shadow 0.1s;
-    image-rendering: pixelated;
   }
-
-  .submit-btn:hover {
-    background: var(--yellow-btn-hover);
-  }
-
+  .submit-btn:hover { background: linear-gradient(180deg, #e0b838 0%, #d0a828 50%, #c09818 100%); }
   .submit-btn:active {
-    transform: translate(2px, 2px);
-    box-shadow:
-      inset -3px -3px 0 rgba(0,0,0,0.15),
-      inset 3px 3px 0 rgba(255,255,255,0.3),
-      1px 1px 0 rgba(0,0,0,0.25);
+    transform: translate(2px,2px);
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), inset 3px 3px 0 rgba(255,255,255,0.3), 1px 1px 0 rgba(0,0,0,0.25);
   }
 
-  /* ===== CONTACT SECTION ===== */
-  #contact {
-    background: linear-gradient(180deg, #2a1a0e 0%, #1a0e06 100%);
+  /* ===== ABOUT ===== */
+  #about {
+    background: linear-gradient(180deg, #5ea8d8 0%, #a8d8f0 30%, #e8d0b0 70%, #a08060 100%);
     padding: 80px 20px 60px;
   }
-
-  .contact-container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .contact-card {
-    background: var(--cream);
-    color: var(--brown-dark);
-    border: 4px solid var(--pixel-border);
+  .about-container { max-width: 700px; margin: 0 auto; }
+  .pixel-card {
+    background: #f5ecd4; color: #3a2a1a;
+    border: 4px solid #3a2010;
     box-shadow:
       inset -3px -3px 0 rgba(0,0,0,0.15),
       inset 3px 3px 0 rgba(255,255,255,0.3),
       6px 6px 0 rgba(0,0,0,0.3);
     padding: 32px 28px;
-    text-align: center;
   }
-
-  .contact-card h2 {
+  .pixel-card h2 {
     font-size: clamp(1rem, 3vw, 1.4rem);
-    margin-bottom: 24px;
-    color: var(--brown-mid);
+    margin-bottom: 20px; color: #5a3a28; text-align: center;
+  }
+  .pixel-card p {
+    font-size: clamp(0.5rem, 1.2vw, 0.65rem);
+    line-height: 2.2; color: #5a4030; text-align: center;
   }
 
-  .contact-card p {
-    font-size: 0.6rem;
-    line-height: 2.2;
-    color: #5a4030;
-    margin-bottom: 20px;
+  /* ===== CONTACT ===== */
+  #contact {
+    background: linear-gradient(180deg, #5ea8d8 0%, #a8d8f0 30%, #e8d0b0 70%, #a08060 100%);
+    padding: 80px 20px 60px;
   }
-
-  .contact-links {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
+  .contact-container { max-width: 600px; margin: 0 auto; }
+  .contact-card {
+    background: #f5ecd4; color: #3a2a1a;
+    border: 4px solid #3a2010;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), inset 3px 3px 0 rgba(255,255,255,0.3), 6px 6px 0 rgba(0,0,0,0.3);
+    padding: 32px 28px; text-align: center;
   }
-
+  .contact-card h2 { font-size: clamp(1rem, 3vw, 1.4rem); margin-bottom: 20px; color: #5a3a28; }
+  .contact-card p { font-size: 0.6rem; line-height: 2.2; color: #5a4030; margin-bottom: 20px; }
+  .contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .contact-link {
-    display: inline-block;
-    padding: 12px 20px;
-    background: var(--sand-mid);
-    color: var(--brown-dark);
-    text-decoration: none;
-    font-family: 'Press Start 2P', monospace;
-    font-size: 0.55rem;
-    border: 3px solid var(--pixel-border);
+    display: inline-block; padding: 12px 20px;
+    background: linear-gradient(180deg, #d8b878 0%, #c8a868 100%);
+    color: #3a2a1a; text-decoration: none;
+    font-family: 'Press Start 2P', monospace; font-size: 0.55rem;
+    border: 3px solid #5a3a20;
     box-shadow: 3px 3px 0 rgba(0,0,0,0.25);
     transition: transform 0.1s, box-shadow 0.1s;
   }
+  .contact-link:hover { transform: translate(1px,1px); box-shadow: 2px 2px 0 rgba(0,0,0,0.25); }
 
-  .contact-link:hover {
-    transform: translate(1px, 1px);
-    box-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  /* Floating sand particles ambient */
+  .ambient-particle {
+    position: fixed; pointer-events: none; z-index: 35;
+    width: 2px; height: 2px; border-radius: 50%;
+    background: rgba(216,192,152,0.4);
+    animation: float-across linear infinite;
   }
-
-  /* ===== PIXEL SCORPION SVG ===== */
-  .scorpion-svg {
-    image-rendering: pixelated;
-  }
-
-  /* Ripple cursor effect */
-  .ripple {
-    position: fixed;
-    pointer-events: none;
-    z-index: 50;
-    border: 2px solid rgba(232,184,64,0.4);
-    border-radius: 50%;
-    animation: ripple-out 0.8s ease-out forwards;
-  }
-
-  @keyframes ripple-out {
-    0% { width: 0; height: 0; opacity: 0.6; transform: translate(-50%,-50%); }
-    100% { width: 80px; height: 80px; opacity: 0; transform: translate(-50%,-50%); }
+  @keyframes float-across {
+    0% { transform: translate(0, 0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { transform: translate(var(--fdx), var(--fdy)); opacity: 0; }
   }
 </style>
 </head>
@@ -477,65 +375,94 @@
   </a>
 </nav>
 
+<!-- SCORPION (follows cursor) -->
+<svg id="scorpion" viewBox="0 0 48 36" width="64" height="48" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="18" cy="33" rx="12" ry="2" fill="rgba(0,0,0,0.12)"/>
+  <!-- Body -->
+  <rect x="12" y="16" width="14" height="10" fill="#d8a848"/>
+  <rect x="10" y="18" width="2" height="6" fill="#c89838"/>
+  <rect x="26" y="18" width="2" height="6" fill="#c89838"/>
+  <rect x="13" y="15" width="12" height="2" fill="#e0b858"/>
+  <rect x="13" y="26" width="12" height="1" fill="#c08830"/>
+  <!-- Head -->
+  <rect x="4" y="16" width="8" height="8" fill="#d8a848"/>
+  <rect x="3" y="17" width="2" height="6" fill="#c89838"/>
+  <rect x="5" y="15" width="6" height="2" fill="#e0b858"/>
+  <!-- Eyes (cute) -->
+  <rect x="5" y="19" width="3" height="3" fill="#2a1a10"/>
+  <rect x="9" y="19" width="3" height="3" fill="#2a1a10"/>
+  <rect x="6" y="19" width="1" height="1" fill="#f8f0e0"/>
+  <rect x="10" y="19" width="1" height="1" fill="#f8f0e0"/>
+  <!-- Mouth -->
+  <rect x="7" y="23" width="3" height="1" fill="#b07828"/>
+  <!-- Tail -->
+  <rect x="26" y="14" width="3" height="6" fill="#c89838"/>
+  <rect x="28" y="10" width="3" height="6" fill="#c89838"/>
+  <rect x="30" y="6" width="3" height="6" fill="#c89838"/>
+  <rect x="32" y="2" width="3" height="6" fill="#c89838"/>
+  <!-- Stinger -->
+  <rect x="34" y="0" width="4" height="4" fill="#b87828"/>
+  <rect x="37" y="1" width="3" height="2" fill="#a06020"/>
+  <!-- Tail highlights -->
+  <rect x="27" y="14" width="1" height="4" fill="#e0c060"/>
+  <rect x="29" y="10" width="1" height="4" fill="#e0c060"/>
+  <rect x="31" y="6" width="1" height="4" fill="#e0c060"/>
+  <rect x="33" y="2" width="1" height="3" fill="#e0c060"/>
+  <!-- Claws upper -->
+  <rect x="2" y="14" width="2" height="3" fill="#c89838"/>
+  <rect x="0" y="12" width="3" height="3" fill="#c89838"/>
+  <!-- Claws lower -->
+  <rect x="2" y="24" width="2" height="3" fill="#c89838"/>
+  <rect x="0" y="26" width="3" height="3" fill="#c89838"/>
+  <!-- Legs -->
+  <rect x="14" y="26" width="2" height="3" fill="#b08030"/>
+  <rect x="18" y="26" width="2" height="4" fill="#b08030"/>
+  <rect x="22" y="26" width="2" height="3" fill="#b08030"/>
+</svg>
+
 <!-- HOME -->
 <section id="home" class="active">
-  <div class="desert-bg"></div>
+  <div class="sky-bg"></div>
   <div class="sun"></div>
   <canvas id="sand-canvas"></canvas>
-  <div class="hero-content">
+  <div class="hero-content" id="heroContent">
     <div class="hero-title">
       AQRAB
-      <!-- Pixel scorpion SVG — cute chunky style -->
-      <svg class="scorpion-svg" viewBox="0 0 40 32" width="100" height="80" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shadow -->
-        <ellipse cx="16" cy="28" rx="10" ry="2" fill="rgba(0,0,0,0.15)"/>
-        <!-- Body (large round) -->
-        <rect x="10" y="14" width="12" height="8" rx="1" fill="#d8a850"/>
-        <rect x="8" y="16" width="2" height="4" fill="#c89838"/>
-        <rect x="22" y="16" width="2" height="4" fill="#c89838"/>
-        <rect x="11" y="13" width="10" height="2" fill="#e0b860"/>
-        <rect x="11" y="22" width="10" height="1" fill="#c08830"/>
-        <!-- Head -->
-        <rect x="4" y="14" width="6" height="6" fill="#d8a850"/>
-        <rect x="3" y="15" width="2" height="4" fill="#c89838"/>
-        <rect x="4" y="13" width="5" height="2" fill="#e0b860"/>
-        <!-- Face — cute eyes + mouth -->
-        <rect x="5" y="16" width="2" height="2" fill="#2a1a10"/>
-        <rect x="8" y="16" width="2" height="2" fill="#2a1a10"/>
-        <rect x="6" y="16" width="1" height="1" fill="#f8f0e0"/>
-        <rect x="9" y="16" width="1" height="1" fill="#f8f0e0"/>
-        <rect x="6" y="19" width="3" height="1" fill="#b07828"/>
-        <!-- Tail curling up and over -->
-        <rect x="22" y="12" width="3" height="6" fill="#c89838"/>
-        <rect x="24" y="8" width="3" height="6" fill="#c89838"/>
-        <rect x="26" y="4" width="3" height="6" fill="#c89838"/>
-        <rect x="28" y="2" width="3" height="4" fill="#c89838"/>
-        <!-- Stinger bulb -->
-        <rect x="30" y="0" width="4" height="4" rx="1" fill="#b87828"/>
-        <rect x="33" y="1" width="2" height="2" fill="#a06020"/>
-        <!-- Highlight on tail -->
-        <rect x="23" y="12" width="1" height="4" fill="#e0c060"/>
-        <rect x="25" y="8" width="1" height="4" fill="#e0c060"/>
-        <rect x="27" y="4" width="1" height="4" fill="#e0c060"/>
-        <rect x="29" y="2" width="1" height="3" fill="#e0c060"/>
-        <!-- Left claw (upper) -->
-        <rect x="2" y="12" width="2" height="3" fill="#c89838"/>
-        <rect x="0" y="10" width="3" height="3" fill="#c89838"/>
-        <rect x="0" y="9" width="1" height="2" fill="#b08030"/>
-        <rect x="2" y="9" width="1" height="2" fill="#b08030"/>
-        <!-- Left claw (lower) -->
-        <rect x="2" y="20" width="2" height="3" fill="#c89838"/>
-        <rect x="0" y="22" width="3" height="3" fill="#c89838"/>
-        <rect x="0" y="24" width="1" height="2" fill="#b08030"/>
-        <rect x="2" y="24" width="1" height="2" fill="#b08030"/>
-        <!-- Legs -->
-        <rect x="12" y="22" width="2" height="3" fill="#b08030"/>
-        <rect x="15" y="22" width="2" height="4" fill="#b08030"/>
-        <rect x="18" y="22" width="2" height="3" fill="#b08030"/>
+      <svg viewBox="0 0 48 36" width="100" height="75" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(3px 4px 2px rgba(0,0,0,0.3))">
+        <rect x="12" y="16" width="14" height="10" fill="#d8a848"/>
+        <rect x="10" y="18" width="2" height="6" fill="#c89838"/>
+        <rect x="26" y="18" width="2" height="6" fill="#c89838"/>
+        <rect x="13" y="15" width="12" height="2" fill="#e0b858"/>
+        <rect x="4" y="16" width="8" height="8" fill="#d8a848"/>
+        <rect x="3" y="17" width="2" height="6" fill="#c89838"/>
+        <rect x="5" y="15" width="6" height="2" fill="#e0b858"/>
+        <rect x="5" y="19" width="3" height="3" fill="#2a1a10"/>
+        <rect x="9" y="19" width="3" height="3" fill="#2a1a10"/>
+        <rect x="6" y="19" width="1" height="1" fill="#f8f0e0"/>
+        <rect x="10" y="19" width="1" height="1" fill="#f8f0e0"/>
+        <rect x="7" y="23" width="3" height="1" fill="#b07828"/>
+        <rect x="26" y="14" width="3" height="6" fill="#c89838"/>
+        <rect x="28" y="10" width="3" height="6" fill="#c89838"/>
+        <rect x="30" y="6" width="3" height="6" fill="#c89838"/>
+        <rect x="32" y="2" width="3" height="6" fill="#c89838"/>
+        <rect x="34" y="0" width="4" height="4" fill="#b87828"/>
+        <rect x="37" y="1" width="3" height="2" fill="#a06020"/>
+        <rect x="27" y="14" width="1" height="4" fill="#e0c060"/>
+        <rect x="29" y="10" width="1" height="4" fill="#e0c060"/>
+        <rect x="31" y="6" width="1" height="4" fill="#e0c060"/>
+        <rect x="33" y="2" width="1" height="3" fill="#e0c060"/>
+        <rect x="2" y="14" width="2" height="3" fill="#c89838"/>
+        <rect x="0" y="12" width="3" height="3" fill="#c89838"/>
+        <rect x="2" y="24" width="2" height="3" fill="#c89838"/>
+        <rect x="0" y="26" width="3" height="3" fill="#c89838"/>
+        <rect x="14" y="26" width="2" height="3" fill="#b08030"/>
+        <rect x="18" y="26" width="2" height="4" fill="#b08030"/>
+        <rect x="22" y="26" width="2" height="3" fill="#b08030"/>
       </svg>
     </div>
     <div class="hero-subtitle">عقرب الصحراء</div>
-    <div class="hero-hint">Click and drag to play with sand</div>
+    <div class="hero-hint">Move cursor to guide the scorpion &middot; Click for sand burst</div>
   </div>
 </section>
 
@@ -544,36 +471,12 @@
   <div class="about-container">
     <div class="pixel-card">
       <h2>About AQRAB</h2>
-      <div class="about-scorpion-row">
-        <svg class="scorpion-svg" viewBox="0 0 40 32" width="56" height="44" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="14" width="12" height="8" fill="#d8a850"/>
-          <rect x="8" y="16" width="2" height="4" fill="#c89838"/>
-          <rect x="22" y="16" width="2" height="4" fill="#c89838"/>
-          <rect x="4" y="14" width="6" height="6" fill="#d8a850"/>
-          <rect x="5" y="16" width="2" height="2" fill="#2a1a10"/>
-          <rect x="8" y="16" width="2" height="2" fill="#2a1a10"/>
-          <rect x="6" y="16" width="1" height="1" fill="#f8f0e0"/>
-          <rect x="9" y="16" width="1" height="1" fill="#f8f0e0"/>
-          <rect x="22" y="12" width="3" height="6" fill="#c89838"/>
-          <rect x="24" y="8" width="3" height="6" fill="#c89838"/>
-          <rect x="26" y="4" width="3" height="6" fill="#c89838"/>
-          <rect x="28" y="2" width="3" height="4" fill="#c89838"/>
-          <rect x="30" y="0" width="4" height="4" fill="#b87828"/>
-          <rect x="33" y="1" width="2" height="2" fill="#a06020"/>
-          <rect x="2" y="12" width="2" height="3" fill="#c89838"/>
-          <rect x="0" y="10" width="3" height="3" fill="#c89838"/>
-          <rect x="2" y="20" width="2" height="3" fill="#c89838"/>
-          <rect x="0" y="22" width="3" height="3" fill="#c89838"/>
-          <rect x="12" y="22" width="2" height="3" fill="#b08030"/>
-          <rect x="15" y="22" width="2" height="4" fill="#b08030"/>
-          <rect x="18" y="22" width="2" height="3" fill="#b08030"/>
-        </svg>
-      </div>
       <p>
-        AQRAB is an interactive desert experience
-        inspired by the vast sand dunes of Saudi Arabia.
-        Watch the sand pour, push it with your cursor,
-        and explore the beauty of the Arabian desert.
+        AQRAB is an interactive pixel desert experience
+        inspired by the vast sand dunes and ancient
+        mud-brick villages of Saudi Arabia.
+        Guide the scorpion, shape the sand, and
+        explore the beauty of the Arabian landscape.
       </p>
     </div>
   </div>
@@ -582,9 +485,7 @@
 <!-- PROMPT -->
 <section id="prompt">
   <div class="prompt-card">
-    <h2>
-      <span class="aqrab-text">AQRAB</span> Prompt
-    </h2>
+    <h2><span class="aqrab-text">AQRAB</span> Prompt</h2>
     <textarea class="prompt-textarea" placeholder="Enter your prompt..."></textarea>
     <button class="submit-btn" id="submitBtn">SUBMIT</button>
   </div>
@@ -609,38 +510,129 @@
 // ===== NAVIGATION =====
 const navLinks = document.querySelectorAll('nav a');
 const sections = document.querySelectorAll('section');
+let currentPage = 'home';
 
-function navigate(pageName) {
-  navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === pageName));
-  sections.forEach(s => s.classList.toggle('active', s.id === pageName));
-  if (pageName === 'home') startSand(); else stopSand();
+function navigate(page) {
+  currentPage = page;
+  navLinks.forEach(l => l.classList.toggle('active', l.dataset.page === page));
+  sections.forEach(s => s.classList.toggle('active', s.id === page));
+  if (page === 'home') startSand(); else stopSand();
 }
 
 navLinks.forEach(link => {
-  link.addEventListener('click', e => {
-    e.preventDefault();
-    navigate(link.dataset.page);
-  });
+  link.addEventListener('click', e => { e.preventDefault(); navigate(link.dataset.page); });
 });
 
-// ===== SAND SIMULATION (Home page background) =====
+// ===== SCORPION FOLLOWS CURSOR =====
+const scorpionEl = document.getElementById('scorpion');
+let scorpX = window.innerWidth / 2, scorpY = window.innerHeight / 2;
+let targetX = scorpX, targetY = scorpY;
+let scorpVx = 0, scorpVy = 0;
+let bobPhase = 0;
+
+document.addEventListener('mousemove', e => {
+  targetX = e.clientX - 32;
+  targetY = e.clientY - 24;
+});
+document.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  targetX = t.clientX - 32;
+  targetY = t.clientY - 24;
+}, { passive: true });
+
+function updateScorpion() {
+  // Smooth follow with slight lag
+  const dx = targetX - scorpX;
+  const dy = targetY - scorpY;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  // Ease toward target
+  const ease = dist > 100 ? 0.08 : dist > 20 ? 0.05 : 0.02;
+  scorpVx += dx * ease;
+  scorpVy += dy * ease;
+  scorpVx *= 0.85;
+  scorpVy *= 0.85;
+  scorpX += scorpVx;
+  scorpY += scorpVy;
+
+  // Bob animation
+  bobPhase += 0.06;
+  const bob = Math.sin(bobPhase) * (dist > 5 ? 2 : 0.5);
+
+  // Flip based on movement direction
+  if (scorpVx < -0.5) scorpionEl.classList.add('flip');
+  else if (scorpVx > 0.5) scorpionEl.classList.remove('flip');
+
+  scorpionEl.style.left = scorpX + 'px';
+  scorpionEl.style.top = (scorpY + bob) + 'px';
+
+  requestAnimationFrame(updateScorpion);
+}
+updateScorpion();
+
+// ===== PARALLAX ON HERO =====
+const heroContent = document.getElementById('heroContent');
+document.addEventListener('mousemove', e => {
+  if (currentPage !== 'home') return;
+  const cx = (e.clientX / window.innerWidth - 0.5) * 2;
+  const cy = (e.clientY / window.innerHeight - 0.5) * 2;
+  heroContent.style.transform = `translate(${cx * -8}px, ${cy * -5}px)`;
+});
+
+// ===== CLICK: SAND BURST PARTICLES =====
+document.addEventListener('click', e => {
+  const count = 12 + (Math.random() * 8) | 0;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'dust';
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 30 + Math.random() * 60;
+    p.style.setProperty('--dx', Math.cos(angle) * speed + 'px');
+    p.style.setProperty('--dy', Math.sin(angle) * speed - 20 + 'px');
+    p.style.left = e.clientX + 'px';
+    p.style.top = e.clientY + 'px';
+    const size = 2 + Math.random() * 4;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    const colors = ['#d8c098', '#c8a870', '#e0d0a8', '#b89860', '#d4b888'];
+    p.style.background = colors[(Math.random() * colors.length) | 0];
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1000);
+  }
+});
+
+// ===== AMBIENT FLOATING DUST =====
+function spawnAmbientDust() {
+  if (currentPage !== 'home') { setTimeout(spawnAmbientDust, 2000); return; }
+  const p = document.createElement('div');
+  p.className = 'ambient-particle';
+  p.style.left = Math.random() * window.innerWidth + 'px';
+  p.style.top = (58 + Math.random() * (window.innerHeight - 58)) + 'px';
+  const dur = 6 + Math.random() * 8;
+  p.style.setProperty('--fdx', (80 + Math.random() * 120) + 'px');
+  p.style.setProperty('--fdy', (-20 + Math.random() * 40) + 'px');
+  p.style.animationDuration = dur + 's';
+  const size = 1 + Math.random() * 3;
+  p.style.width = size + 'px';
+  p.style.height = size + 'px';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), dur * 1000);
+  setTimeout(spawnAmbientDust, 300 + Math.random() * 600);
+}
+spawnAmbientDust();
+
+// ===== SAND SIMULATION =====
 const sandCanvas = document.getElementById('sand-canvas');
 const sctx = sandCanvas.getContext('2d');
 let sandRunning = true;
 
-function resizeSand() {
-  const rect = sandCanvas.getBoundingClientRect();
-  // Use half resolution for performance with fullscreen
-  const scale = window.devicePixelRatio > 1 ? 0.5 : 0.75;
-  sandCanvas.width = (rect.width * scale) | 0;
-  sandCanvas.height = (rect.height * scale) | 0;
-}
-resizeSand();
-
+const scale = 0.6;
+sandCanvas.width = (window.innerWidth * scale) | 0;
+sandCanvas.height = ((window.innerHeight - 58) * scale) | 0;
 const COLS = sandCanvas.width;
 const ROWS = sandCanvas.height;
-const EMPTY = 0, RUB = 1, NAFUD = 2, DAHNA = 3, HEJAZ = 4;
 
+const EMPTY = 0, RUB = 1, NAFUD = 2, DAHNA = 3, HEJAZ = 4;
 function isSand(t) { return t >= RUB && t <= HEJAZ; }
 
 const total = COLS * ROWS;
@@ -654,43 +646,38 @@ function packRGB(hex) {
   const r = parseInt(hex.slice(1,3),16);
   const g = parseInt(hex.slice(3,5),16);
   const b = parseInt(hex.slice(5,7),16);
-  return (255 << 24) | (b << 16) | (g << 8) | r;
+  return (255<<24)|(b<<16)|(g<<8)|r;
 }
 
 const palettes = {
-  [RUB]:   ['#e8a840','#d49530','#f0b848','#c88a28','#dca038','#e0a035','#d89828','#ecb040','#d4a030','#e8b038'].map(packRGB),
-  [NAFUD]: ['#f0d0a0','#e8c490','#f5d8a8','#ddb888','#f2cca0','#eac898','#f4d4a4','#e0c090','#f0cc98','#e4c888'].map(packRGB),
-  [DAHNA]: ['#c86030','#b85028','#d47038','#a84820','#d06840','#c05828','#b84e20','#d87040','#c45830','#b85830'].map(packRGB),
-  [HEJAZ]: ['#3a3530','#302b28','#454038','#282420','#4a4540','#343030','#3e3a35','#2c2820','#363230','#403c38'].map(packRGB),
+  [RUB]:   ['#e8b858','#d8a848','#f0c060','#d0a040','#e0b050','#e8b848','#d4a438','#ecc058'].map(packRGB),
+  [NAFUD]: ['#f0dca8','#e8d098','#f5e0b0','#ddc490','#f2d4a0','#ead098','#f4d8a4','#e0c890'].map(packRGB),
+  [DAHNA]: ['#c8a070','#b89060','#d0a878','#a88050','#c89868','#b88858','#c09060','#d4b080'].map(packRGB),
+  [HEJAZ]: ['#8a7050','#7a6040','#906848','#685838','#987858','#806848','#887050','#6a5838'].map(packRGB),
 };
 
 function randomColor(type) {
   const p = palettes[type];
-  return p[(Math.random() * p.length) | 0];
+  return p[(Math.random()*p.length)|0];
 }
 
-// Transparent background so sunset gradient shows through
-const bgColor = 0; // fully transparent
-
-// Pre-fill bottom portion with dune-like sand shapes
+// Init dune landscape
 function initDunes() {
-  const duneHeight = ROWS * 0.45;
+  const dH = ROWS * 0.5;
   for (let x = 0; x < COLS; x++) {
-    // Layered sine waves for dune shapes
-    const h1 = Math.sin(x * 0.008) * duneHeight * 0.3;
-    const h2 = Math.sin(x * 0.02 + 1.5) * duneHeight * 0.15;
-    const h3 = Math.sin(x * 0.005 + 3) * duneHeight * 0.2;
-    const height = (duneHeight + h1 + h2 + h3) | 0;
+    const h1 = Math.sin(x * 0.006 + 0.5) * dH * 0.35;
+    const h2 = Math.sin(x * 0.018 + 2) * dH * 0.15;
+    const h3 = Math.sin(x * 0.003 + 4) * dH * 0.25;
+    const h4 = Math.sin(x * 0.04) * dH * 0.06;
+    const height = (dH + h1 + h2 + h3 + h4) | 0;
     const startY = ROWS - height;
-
     for (let y = startY; y < ROWS; y++) {
       const i = y * COLS + x;
-      // Choose sand type based on depth layers
       const depth = (y - startY) / height;
       let type;
-      if (depth < 0.15) type = NAFUD;
-      else if (depth < 0.5) type = RUB;
-      else if (depth < 0.8) type = DAHNA;
+      if (depth < 0.1) type = NAFUD;
+      else if (depth < 0.45) type = RUB;
+      else if (depth < 0.75) type = DAHNA;
       else type = HEJAZ;
       grid[i] = type;
       color[i] = randomColor(type);
@@ -699,151 +686,142 @@ function initDunes() {
 }
 initDunes();
 
-const sandTypes = [RUB, RUB, RUB, NAFUD, NAFUD, DAHNA, DAHNA, HEJAZ];
-
-// Pour streams
-const NUM_STREAMS = 4;
+const sandTypes = [RUB, RUB, RUB, NAFUD, NAFUD, DAHNA];
+const NUM_STREAMS = 3;
 let streams = [];
 for (let i = 0; i < NUM_STREAMS; i++) {
   streams.push({
     x: ((i + 0.5) / NUM_STREAMS) * COLS | 0,
-    width: 12 + Math.random() * 20 | 0,
+    width: 10 + Math.random() * 16 | 0,
     type: sandTypes[(Math.random() * sandTypes.length) | 0],
-    density: 0.08 + Math.random() * 0.12,
-    drift: (Math.random() - 0.5) * 0.2,
+    density: 0.06 + Math.random() * 0.08,
+    drift: (Math.random() - 0.5) * 0.15,
   });
 }
 
 let frameCount = 0;
-
 function pourSand() {
   frameCount++;
   for (const s of streams) {
     s.x += s.drift;
     if (s.x < s.width) s.drift = Math.abs(s.drift);
     if (s.x > COLS - s.width) s.drift = -Math.abs(s.drift);
-    if (frameCount % 400 === 0 && Math.random() < 0.3)
+    if (frameCount % 500 === 0 && Math.random() < 0.3)
       s.type = sandTypes[(Math.random() * sandTypes.length) | 0];
-
     const hw = s.width >> 1;
     for (let dx = -hw; dx <= hw; dx++) {
       const px = (s.x + dx) | 0;
       if (px < 0 || px >= COLS) continue;
-      const falloff = 1 - (dx * dx) / (hw * hw + 1);
-      if (Math.random() > s.density * falloff) continue;
-      if (grid[px] === EMPTY) {
-        grid[px] = s.type;
-        color[px] = randomColor(s.type);
-      }
+      const f = 1 - (dx*dx)/(hw*hw+1);
+      if (Math.random() > s.density * f) continue;
+      if (grid[px] === EMPTY) { grid[px] = s.type; color[px] = randomColor(s.type); }
     }
   }
 }
 
-// Mouse interaction
-let mx = -1, my = -1, pmx = -1, pmy = -1;
-let mouseDown = false;
-const PUSH_RADIUS = 14;
+// Mouse interaction with sand
+let smx = -1, smy = -1, spmx = -1, spmy = -1;
+let smouseDown = false;
+const PUSH_R = 14;
 
-function canvasXY(e) {
-  const rect = sandCanvas.getBoundingClientRect();
-  return [
-    ((e.clientX - rect.left) * COLS / rect.width) | 0,
-    ((e.clientY - rect.top) * ROWS / rect.height) | 0
-  ];
+function sandXY(e) {
+  const r = sandCanvas.getBoundingClientRect();
+  return [((e.clientX-r.left)*COLS/r.width)|0, ((e.clientY-r.top)*ROWS/r.height)|0];
 }
 
-sandCanvas.addEventListener('mousedown', e => { mouseDown = true; const [x,y]=canvasXY(e); mx=x; my=y; pmx=x; pmy=y; });
-sandCanvas.addEventListener('mousemove', e => { const [x,y]=canvasXY(e); pmx=mx; pmy=my; mx=x; my=y; });
-sandCanvas.addEventListener('mouseup', () => mouseDown = false);
-sandCanvas.addEventListener('mouseleave', () => { mouseDown = false; mx=-1; my=-1; });
-
-sandCanvas.addEventListener('touchstart', e => { e.preventDefault(); mouseDown=true; const t=e.touches[0]; const [x,y]=canvasXY(t); mx=x; my=y; pmx=x; pmy=y; }, {passive:false});
-sandCanvas.addEventListener('touchmove', e => { e.preventDefault(); const t=e.touches[0]; const [x,y]=canvasXY(t); pmx=mx; pmy=my; mx=x; my=y; }, {passive:false});
-sandCanvas.addEventListener('touchend', e => { e.preventDefault(); mouseDown=false; mx=-1; my=-1; }, {passive:false});
-
-// Ripple on click
-sandCanvas.addEventListener('click', e => {
-  const ripple = document.createElement('div');
-  ripple.className = 'ripple';
-  ripple.style.left = e.clientX + 'px';
-  ripple.style.top = e.clientY + 'px';
-  document.body.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 800);
-});
+sandCanvas.addEventListener('mousedown', e => { smouseDown=true; const [x,y]=sandXY(e); smx=x; smy=y; spmx=x; spmy=y; });
+sandCanvas.addEventListener('mousemove', e => { const [x,y]=sandXY(e); spmx=smx; spmy=smy; smx=x; smy=y; });
+sandCanvas.addEventListener('mouseup', () => smouseDown=false);
+sandCanvas.addEventListener('mouseleave', () => { smouseDown=false; smx=-1; smy=-1; });
+sandCanvas.addEventListener('touchstart', e => { e.preventDefault(); smouseDown=true; const t=e.touches[0]; const [x,y]=sandXY(t); smx=x; smy=y; spmx=x; spmy=y; }, {passive:false});
+sandCanvas.addEventListener('touchmove', e => { e.preventDefault(); const t=e.touches[0]; const [x,y]=sandXY(t); spmx=smx; spmy=smy; smx=x; smy=y; }, {passive:false});
+sandCanvas.addEventListener('touchend', e => { e.preventDefault(); smouseDown=false; smx=-1; smy=-1; }, {passive:false});
 
 function pushSand() {
-  if (mx < 0 || my < 0 || pmx < 0) return;
-  const vx = mx - pmx;
-  const vy = my - pmy;
-  const speed = Math.sqrt(vx * vx + vy * vy);
-  if (speed < 0.8) return;
-
-  const nx = vx / speed;
-  const ny = vy / speed;
-  const force = Math.min(speed, 16);
-  const r = PUSH_RADIUS;
-
-  for (let dy = -r; dy <= r; dy++) {
-    for (let dx = -r; dx <= r; dx++) {
-      const d2 = dx * dx + dy * dy;
-      if (d2 > r * r) continue;
-      const sx = mx + dx;
-      const sy = my + dy;
-      if (sx < 0 || sx >= COLS || sy < 0 || sy >= ROWS) continue;
-      const si = sy * COLS + sx;
-      if (!isSand(grid[si])) continue;
-
-      const strength = 1 - Math.sqrt(d2) / r;
-      const spread = (Math.random() - 0.5) * 0.8;
-      const pnx = nx + spread * (-ny);
-      const pny = ny + spread * nx;
-      const dist = (1 + strength * force * (0.5 + Math.random() * 0.5)) | 0;
-
-      let bx = sx, by = sy;
-      for (let step = 1; step <= dist; step++) {
-        const tx = (sx + pnx * step) | 0;
-        const ty = (sy + pny * step) | 0;
-        if (tx < 0 || tx >= COLS || ty < 0 || ty >= ROWS) break;
-        if (grid[ty * COLS + tx] === EMPTY) { bx = tx; by = ty; }
-        else break;
-      }
-      if (bx !== sx || by !== sy) {
-        const di = by * COLS + bx;
-        grid[di] = grid[si]; color[di] = color[si];
-        grid[si] = EMPTY; color[si] = 0;
-      }
+  if (smx<0||smy<0||spmx<0) return;
+  const vx=smx-spmx, vy=smy-spmy;
+  const speed=Math.sqrt(vx*vx+vy*vy);
+  if (speed<0.8) return;
+  const nx=vx/speed, ny=vy/speed, force=Math.min(speed,16), r=PUSH_R;
+  for (let dy=-r;dy<=r;dy++) for (let dx=-r;dx<=r;dx++) {
+    const d2=dx*dx+dy*dy;
+    if (d2>r*r) continue;
+    const sx=smx+dx, sy=smy+dy;
+    if (sx<0||sx>=COLS||sy<0||sy>=ROWS) continue;
+    const si=sy*COLS+sx;
+    if (!isSand(grid[si])) continue;
+    const str=1-Math.sqrt(d2)/r;
+    const sp=(Math.random()-0.5)*0.8;
+    const pnx=nx+sp*(-ny), pny=ny+sp*nx;
+    const dist=(1+str*force*(0.5+Math.random()*0.5))|0;
+    let bx=sx, by=sy;
+    for (let step=1;step<=dist;step++) {
+      const tx=(sx+pnx*step)|0, ty=(sy+pny*step)|0;
+      if (tx<0||tx>=COLS||ty<0||ty>=ROWS) break;
+      if (grid[ty*COLS+tx]===EMPTY){bx=tx;by=ty;} else break;
+    }
+    if (bx!==sx||by!==sy) {
+      const di=by*COLS+bx;
+      grid[di]=grid[si]; color[di]=color[si];
+      grid[si]=EMPTY; color[si]=0;
     }
   }
 }
+
+// Click to explode sand outward
+sandCanvas.addEventListener('click', e => {
+  const [cx,cy] = sandXY(e);
+  const r = 20;
+  for (let dy=-r;dy<=r;dy++) for (let dx=-r;dx<=r;dx++) {
+    const d2=dx*dx+dy*dy;
+    if (d2>r*r) continue;
+    const sx=cx+dx, sy=cy+dy;
+    if (sx<0||sx>=COLS||sy<0||sy>=ROWS) continue;
+    const si=sy*COLS+sx;
+    if (!isSand(grid[si])) continue;
+    const str=1-Math.sqrt(d2)/r;
+    const angle=Math.atan2(dy,dx);
+    const dist=(str*12*(0.5+Math.random()*0.5))|0;
+    let bx=sx,by=sy;
+    for (let step=1;step<=dist;step++) {
+      const tx=(sx+Math.cos(angle)*step)|0;
+      const ty=(sy+Math.sin(angle)*step-step*0.3)|0;
+      if (tx<0||tx>=COLS||ty<0||ty>=ROWS) break;
+      if (grid[ty*COLS+tx]===EMPTY){bx=tx;by=ty;} else break;
+    }
+    if (bx!==sx||by!==sy) {
+      const di=by*COLS+bx;
+      grid[di]=grid[si]; color[di]=color[si];
+      grid[si]=EMPTY; color[si]=0;
+    }
+  }
+});
 
 function simulate() {
   updated.fill(0);
-  for (let y = ROWS - 2; y >= 0; y--) {
-    const lr = (y & 1);
-    for (let i = 0; i < COLS; i++) {
-      const x = lr ? i : COLS - 1 - i;
-      const ci = y * COLS + x;
+  for (let y=ROWS-2;y>=0;y--) {
+    const lr=(y&1);
+    for (let i=0;i<COLS;i++) {
+      const x=lr?i:COLS-1-i;
+      const ci=y*COLS+x;
       if (updated[ci]) continue;
-      const cell = grid[ci];
+      const cell=grid[ci];
       if (!isSand(cell)) continue;
-
-      const below = ci + COLS;
-      if (grid[below] === EMPTY) {
-        grid[below] = cell; color[below] = color[ci];
-        grid[ci] = EMPTY; color[ci] = 0;
-        updated[below] = 1; updated[ci] = 1;
-        continue;
+      const below=ci+COLS;
+      if (grid[below]===EMPTY) {
+        grid[below]=cell; color[below]=color[ci];
+        grid[ci]=EMPTY; color[ci]=0;
+        updated[below]=1; updated[ci]=1; continue;
       }
-      const goLeft = Math.random() > 0.5;
-      for (const ddx of goLeft ? [-1,1] : [1,-1]) {
-        const nx2 = x + ddx;
-        if (nx2 < 0 || nx2 >= COLS) continue;
-        const ni = below + ddx;
-        if (grid[ni] === EMPTY) {
-          grid[ni] = cell; color[ni] = color[ci];
-          grid[ci] = EMPTY; color[ci] = 0;
-          updated[ni] = 1; updated[ci] = 1;
-          break;
+      const gl=Math.random()>0.5;
+      for (const ddx of gl?[-1,1]:[1,-1]) {
+        const nx2=x+ddx;
+        if (nx2<0||nx2>=COLS) continue;
+        const ni=below+ddx;
+        if (grid[ni]===EMPTY) {
+          grid[ni]=cell; color[ni]=color[ci];
+          grid[ci]=EMPTY; color[ci]=0;
+          updated[ni]=1; updated[ci]=1; break;
         }
       }
     }
@@ -851,10 +829,8 @@ function simulate() {
 }
 
 function draw() {
-  for (let i = 0; i < total; i++) {
-    pixels[i] = grid[i] === EMPTY ? bgColor : color[i];
-  }
-  sctx.putImageData(imageData, 0, 0);
+  for (let i=0;i<total;i++) pixels[i]=grid[i]===EMPTY?0:color[i];
+  sctx.putImageData(imageData,0,0);
 }
 
 let animId;
@@ -867,19 +843,14 @@ function loop() {
   draw();
   animId = requestAnimationFrame(loop);
 }
-
-function startSand() { if (!sandRunning) { sandRunning = true; loop(); } }
-function stopSand() { sandRunning = false; cancelAnimationFrame(animId); }
-
+function startSand() { if(!sandRunning){sandRunning=true;loop();} }
+function stopSand() { sandRunning=false; cancelAnimationFrame(animId); }
 loop();
 
-// Submit button
+// Submit
 document.getElementById('submitBtn').addEventListener('click', () => {
   const ta = document.querySelector('.prompt-textarea');
-  if (ta.value.trim()) {
-    alert('Prompt submitted: ' + ta.value);
-    ta.value = '';
-  }
+  if (ta.value.trim()) { alert('Prompt submitted: '+ta.value); ta.value=''; }
 });
 </script>
 </body>
